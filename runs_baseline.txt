@@ -1,0 +1,423 @@
+"""Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # data parameters
+    data_dir = './data'
+    batch_size = 128
+    num_workers = 4  # optimal for M1 Pro
+    
+    # model parameters
+    num_classes = 10
+    
+    # training parameters
+    num_epochs = 200
+    learning_rate = 0.1
+    momentum = 0.9
+    weight_decay = 5e-4
+    
+    # learning rate schedule
+    lr_step_size = 30
+    lr_gamma = 0.1
+    
+    # device settings
+    device = 'mps'  # Metal Performance Shaders for M1
+    
+    # logging parameters
+    log_interval = 100  # how often to log training stats
+    checkpoint_dir = './checkpoints'
+    
+    # optimizer parameters
+    nesterov = True  # use nesterov momentum
+    
+    # early stopping
+    patience = 20  # number of epochs to wait for improvement before early stopping
+    min_delta = 0.001  # minimum change in validation accuracy to qualify as an improvement
+    
+    # M1 specific optimizations
+    pin_memory = True  # faster data transfer to GPU
+    persistent_workers = True  # keep worker processes alive between data loading
+    prefetch_factor = 2  # number of batches loaded in advance by each worker
+
+    """Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 256  # increased for better gradient estimates
+    device = 'mps'  # or 'cuda' if available
+    seed = 42
+    
+    # optimization
+    num_epochs = 300  # increased to allow for better convergence
+    learning_rate = 0.1
+    momentum = 0.9
+    weight_decay = 1e-4  # increased for better regularization
+    
+    # learning rate schedule
+    warmup_epochs = 5
+    min_lr = 1e-6
+    
+    # early stopping
+    patience = 25  # increased patience for cosine schedule
+    
+    # data augmentation
+    cutmix_prob = 0.5
+    mixup_alpha = 0.2
+    
+    # model
+    num_classes = 10
+    
+    # logging
+    log_interval = 10
+
+    """Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 128  # reduced to allow for larger gradients
+    device = 'mps'  # or 'cuda' if available
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 400  # increased for better convergence
+    learning_rate = 0.05  # reduced initial learning rate
+    momentum = 0.9
+    weight_decay = 2e-4  # increased for stronger regularization
+    nesterov = True
+    
+    # learning rate schedule
+    warmup_epochs = 10  # increased warmup period
+    min_lr = 1e-6
+    
+    # early stopping
+    patience = 30  # increased patience
+    min_delta = 0.001
+    
+    # data augmentation
+    cutmix_prob = 0.3  # reduced to prevent too aggressive mixing
+    mixup_alpha = 0.2
+    autoaugment = True  # enable AutoAugment
+    
+    # model
+    num_classes = 10
+    dropout_rate = 0.3  # add dropout for regularization
+    
+    # logging
+    log_interval = 10
+    
+    # optimizer settings
+    grad_clip = 5.0  # add gradient clipping
+
+    """Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 64  # reduced for better gradient estimates
+    device = 'mps'  # or 'cuda' if available
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 200
+    learning_rate = 0.1
+    momentum = 0.9
+    weight_decay = 5e-3  # increased for stronger regularization
+    nesterov = True
+    
+    # learning rate schedule
+    lr_milestones = [60, 120, 160]  # adjusted milestone schedule
+    lr_gamma = 0.2  # more gradual learning rate decay
+    
+    # early stopping
+    patience = 25
+    min_delta = 0.001
+    
+    # model
+    num_classes = 10
+
+    """Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 128  # increased for more stable gradients
+    device = 'mps'  # or 'cuda' if available
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 200
+    learning_rate = 0.01  # reduced initial learning rate
+    momentum = 0.9
+    weight_decay = 1e-4  # reduced to standard ResNet value
+    nesterov = True
+    
+    # learning rate schedule
+    lr_milestones = [80, 120, 160]  # later milestones
+    lr_gamma = 0.1  # standard decay factor
+    
+    # early stopping
+    patience = 30  # increased patience
+    min_delta = 0.001
+    
+    # model
+    num_classes = 10
+
+    """Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 96  # reduced for better regularization
+    device = 'mps'  # or 'cuda' if available
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 250  # increased for better convergence
+    learning_rate = 0.05  # increased for better exploration
+    momentum = 0.9
+    weight_decay = 5e-4  # increased for stronger regularization
+    nesterov = True
+    
+    # learning rate schedule
+    lr_milestones = [60, 120, 160]
+    lr_gamma = 0.2  # more gradual decay
+    
+    # early stopping
+    patience = 35  # increased for better plateau exploration
+    min_delta = 0.0005  # reduced for finer improvement detection
+    
+    # model
+    num_classes = 10
+
+"""Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 96  # reduced for better regularization
+    device = 'mps'  # or 'cuda' if available
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 50  # shortened for validation run
+    learning_rate = 0.05  # increased for better exploration
+    momentum = 0.9
+    weight_decay = 5e-4  # increased for stronger regularization
+    nesterov = True
+    
+    # learning rate schedule
+    lr_milestones = [15, 30, 40]  # adjusted for shorter run
+    lr_gamma = 0.2  # more gradual decay
+    
+    # early stopping
+    patience = 10  # adjusted for shorter run
+    min_delta = 0.0005  # reduced for finer improvement detection
+    
+    # model
+    num_classes = 10
+
+"""Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 128  # optimal batch size for ResNet
+    device = 'mps'  # macbook pro m1
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 200
+    learning_rate = 0.1  # standard ResNet learning rate
+    momentum = 0.9
+    weight_decay = 2e-4  # optimal from ResNet paper
+    nesterov = True
+    
+    # learning rate schedule - cosine annealing
+    warmup_epochs = 5
+    min_lr = 1e-6
+    
+    # data augmentation
+    autoaugment = True  # use CIFAR10 policy
+    cutout_size = 16
+    cutout_prob = 1.0
+    mixup_alpha = 0.2
+    
+    # regularization
+    label_smoothing = 0.1
+    
+    # early stopping
+    patience = 30
+    min_delta = 0.001
+    
+    # model
+    num_classes = 10
+
+
+"""Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 128  # optimal batch size for ResNet
+    device = 'mps'  # macbook pro m1
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 200
+    learning_rate = 0.1  # standard ResNet learning rate
+    momentum = 0.9
+    weight_decay = 2e-4  # optimal from ResNet paper
+    nesterov = True
+    
+    # learning rate schedule - cosine annealing
+    warmup_epochs = 5
+    min_lr = 1e-6
+    warmup_start_lr = 0.01  # start from 0.01 and warm up to 0.1
+    
+    # data augmentation
+    autoaugment = True  # use CIFAR10 policy
+    cutout_size = 16
+    cutout_prob = 1.0
+    mixup_alpha = 0.2
+    
+    # regularization
+    label_smoothing = 0.1
+    
+    # early stopping
+    patience = 30
+    min_delta = 0.001
+    
+    # model
+    num_classes = 10
+
+
+"""Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 128
+    device = 'mps'
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 300
+    learning_rate = 0.1
+    momentum = 0.9
+    weight_decay = 3e-4  # increased slightly
+    nesterov = True
+    
+    # learning rate schedule - 3-phase cosine annealing
+    warmup_epochs = 5
+    min_lr = 1e-6
+    warmup_start_lr = 0.01
+    
+    # advanced training
+    stochastic_depth_prob = 0.8
+    label_smoothing = 0.1
+    mixup_alpha = 0.2
+    cutmix_alpha = 1.0
+    
+    # data augmentation
+    randaugment = True  # replacing autoaugment
+    randaugment_n = 2  # number of augmentations to apply
+    randaugment_m = 14  # magnitude of augmentations
+    random_erasing_prob = 0.2
+    trivialaugment = True
+    
+    # regularization
+    drop_path_rate = 0.2  # for stochastic depth
+    
+    # early stopping
+    patience = 30
+    min_delta = 0.001
+    
+    # model
+    num_classes = 10
+    use_se_blocks = True  # add squeeze-excitation
+
+
+"""Configuration settings for training ResNet18 on CIFAR-10."""
+
+class Config:
+    # paths
+    data_dir = './data'
+    checkpoint_dir = './checkpoints'
+    
+    # training
+    batch_size = 128
+    device = 'mps'
+    seed = 42
+    num_workers = 4
+    
+    # optimization
+    num_epochs = 300
+    learning_rate = 0.1
+    momentum = 0.9
+    weight_decay = 2e-4  # slightly reduced for better generalization
+    nesterov = True
+    
+    # learning rate schedule - 3-phase cosine annealing
+    warmup_epochs = 5
+    min_lr = 1e-5  # increased minimum lr
+    warmup_start_lr = 0.01
+    
+    # advanced training
+    stochastic_depth_prob = 0.5  # reduced for better stability
+    label_smoothing = 0.15  # slightly increased
+    mixup_alpha = 0.4  # increased for better regularization
+    cutmix_alpha = 1.0
+    
+    # data augmentation
+    randaugment = True
+    randaugment_n = 2
+    randaugment_m = 10  # reduced magnitude
+    random_erasing_prob = 0.25  # slightly increased
+    trivialaugment = False  # disabled to prevent over-augmentation
+    
+    # regularization
+    drop_path_rate = 0.15  # reduced for better stability
+    
+    # early stopping
+    patience = 40  # increased patience
+    min_delta = 0.0005  # reduced for finer improvements
+    
+    # model
+    num_classes = 10
+    use_se_blocks = True
