@@ -1,0 +1,15 @@
+2024-12-13 05:49:06,069 [INFO] Starting training for resnet_variant_3
+2024-12-13 05:49:06,069 [INFO] Configuration: experiments/multi_comparison/resnet_variant_3/config/test_hyperparams.yaml
+2024-12-13 05:49:06,075 [INFO] Using device: mps
+2024-12-13 05:49:10,477 [INFO] 
+ResNet-18 Architecture:
+2024-12-13 05:49:10,484 [INFO] --------------------------------------------------
+2024-12-13 05:49:10,484 [INFO] Initial Conv Layer: 3 -> 64 channels
+2024-12-13 05:49:10,484 [INFO] Layer1: 64 -> 64 channels, 2 blocks with SE
+2024-12-13 05:49:10,484 [INFO] Layer2: 64 -> 128 channels, 2 blocks with SE
+2024-12-13 05:49:10,484 [INFO] Layer3: 128 -> 256 channels, 2 blocks with SE
+2024-12-13 05:49:10,484 [INFO] Layer4: 256 -> 512 channels, 2 blocks with SE
+2024-12-13 05:49:10,484 [INFO] Global Average Pooling
+2024-12-13 05:49:10,484 [INFO] Fully Connected: 512 -> 10 classes
+2024-12-13 05:49:10,484 [INFO] --------------------------------------------------
+2024-12-13 05:49:10,493 [INFO] Starting training loop

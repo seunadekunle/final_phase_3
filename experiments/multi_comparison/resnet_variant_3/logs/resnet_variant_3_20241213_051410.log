@@ -1,0 +1,4 @@
+2024-12-13 05:14:10,196 [INFO] Starting training for resnet_variant_3
+2024-12-13 05:14:10,196 [INFO] Configuration: experiments/multi_comparison/resnet_variant_3/config/test_hyperparams.yaml
+2024-12-13 05:14:10,197 [INFO] Using device: mps
+2024-12-13 05:14:12,041 [INFO] Starting training loop

@@ -1,0 +1,9 @@
+test_accuracy: 39.46
+test_loss: 1.7986838054656982
+best_val_accuracy: 39.96
+training_time: 250.40106391906738
+epochs_completed: 1
+final_train_loss: 2.0576099902391434
+final_train_acc: 0.26964715514520204
+final_val_loss: 1.7889269399642944
+final_val_acc: 39.96

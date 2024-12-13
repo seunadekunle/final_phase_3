@@ -1,0 +1,35 @@
+2024-12-13 05:14:53,331 [INFO] Starting training for resnet_variant_1
+2024-12-13 05:14:53,331 [INFO] Configuration: experiments/multi_comparison/resnet_variant_1/config/test_hyperparams.yaml
+2024-12-13 05:14:53,333 [INFO] Using device: mps
+2024-12-13 05:14:55,340 [INFO] 
+ResNet-18 Architecture:
+2024-12-13 05:14:55,340 [INFO] --------------------------------------------------
+2024-12-13 05:14:55,340 [INFO] Initial Conv Layer: 3 -> 64 channels
+2024-12-13 05:14:55,340 [INFO] Layer1: 64 -> 64 channels, 2 blocks with SE
+2024-12-13 05:14:55,340 [INFO] Layer2: 64 -> 128 channels, 2 blocks with SE
+2024-12-13 05:14:55,340 [INFO] Layer3: 128 -> 256 channels, 2 blocks with SE
+2024-12-13 05:14:55,340 [INFO] Layer4: 256 -> 512 channels, 2 blocks with SE
+2024-12-13 05:14:55,340 [INFO] Global Average Pooling
+2024-12-13 05:14:55,340 [INFO] Fully Connected: 512 -> 10 classes
+2024-12-13 05:14:55,340 [INFO] --------------------------------------------------
+2024-12-13 05:14:55,341 [INFO] Starting training loop
+2024-12-13 05:19:33,529 [INFO] Epoch 1 - Train loss: 2.0584, acc: 0.2861, lr: 0.100000
+2024-12-13 05:20:16,516 [INFO] Validation - Average loss: 1.8607, Accuracy: 40.64%
+2024-12-13 05:20:36,929 [INFO] Saved checkpoint with accuracy 40.64%
+2024-12-13 05:24:35,553 [INFO] Epoch 2 - Train loss: 1.7274, acc: 0.4670, lr: 0.075002
+2024-12-13 05:25:11,289 [INFO] Validation - Average loss: 1.4706, Accuracy: 60.62%
+2024-12-13 05:25:31,780 [INFO] Saved checkpoint with accuracy 60.62%
+2024-12-13 05:29:32,407 [INFO] Epoch 3 - Train loss: 1.5317, acc: 0.5776, lr: 0.025008
+2024-12-13 05:30:09,386 [INFO] Validation - Average loss: 1.3578, Accuracy: 68.18%
+2024-12-13 05:30:30,152 [INFO] Saved checkpoint with accuracy 68.18%
+2024-12-13 05:34:00,479 [INFO] Epoch 4 - Train loss: 1.4938, acc: 0.5978, lr: 0.000010
+2024-12-13 05:34:33,858 [INFO] Validation - Average loss: 1.3303, Accuracy: 68.60%
+2024-12-13 05:34:54,130 [INFO] Saved checkpoint with accuracy 68.60%
+2024-12-13 05:37:41,097 [INFO] Epoch 5 - Train loss: 1.4729, acc: 0.6076, lr: 0.025007
+2024-12-13 05:38:14,119 [INFO] Validation - Average loss: 1.2950, Accuracy: 70.02%
+2024-12-13 05:38:34,424 [INFO] Saved checkpoint with accuracy 70.02%
+2024-12-13 05:38:47,939 [INFO] Test - Average loss: 1.3213, Accuracy: 69.14%
+2024-12-13 05:39:07,947 [INFO] 
+Training completed!
+2024-12-13 05:39:07,947 [INFO] Total training time: 0.40 hours
+2024-12-13 05:39:07,947 [INFO] Final test accuracy: 69.14%

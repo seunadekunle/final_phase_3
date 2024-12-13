@@ -1,0 +1,23 @@
+2024-12-13 06:48:48,841 [INFO] Starting training for resnet_variant_2
+2024-12-13 06:48:48,841 [INFO] Configuration: experiments/multi_comparison/resnet_variant_2/config/test_hyperparams.yaml
+2024-12-13 06:48:48,842 [INFO] Using device: mps
+2024-12-13 06:48:50,771 [INFO] 
+ResNet-18 Architecture:
+2024-12-13 06:48:50,771 [INFO] --------------------------------------------------
+2024-12-13 06:48:50,771 [INFO] Initial Conv Layer: 3 -> 64 channels
+2024-12-13 06:48:50,771 [INFO] Layer1: 64 -> 64 channels, 2 blocks with SE
+2024-12-13 06:48:50,771 [INFO] Layer2: 64 -> 128 channels, 2 blocks with SE
+2024-12-13 06:48:50,771 [INFO] Layer3: 128 -> 256 channels, 2 blocks with SE
+2024-12-13 06:48:50,771 [INFO] Layer4: 256 -> 512 channels, 2 blocks with SE
+2024-12-13 06:48:50,771 [INFO] Global Average Pooling
+2024-12-13 06:48:50,771 [INFO] Fully Connected: 512 -> 10 classes
+2024-12-13 06:48:50,771 [INFO] --------------------------------------------------
+2024-12-13 06:48:50,772 [INFO] Starting training loop
+2024-12-13 06:51:26,030 [INFO] Epoch 1 - Train loss: 2.0576, acc: 0.2696, lr: 0.100000
+2024-12-13 06:52:01,907 [INFO] Val - Average loss: 1.7889, Accuracy: 39.96%
+2024-12-13 06:52:22,831 [INFO] Saved checkpoint with accuracy 39.96%
+2024-12-13 06:52:41,157 [INFO] Test - Average loss: 1.7987, Accuracy: 39.46%
+2024-12-13 06:53:01,178 [INFO] 
+Training completed!
+2024-12-13 06:53:01,178 [INFO] Total training time: 0.07 hours
+2024-12-13 06:53:01,178 [INFO] Final test accuracy: 39.46%

@@ -1,0 +1,31 @@
+=== Training started at 2024-12-13 05:14:04 ===
+Variant: resnet_variant_1
+Description: Test run: Variant 1 with CutMix and cosine annealing
+Configuration: experiments/multi_comparison/resnet_variant_1/config/test_hyperparams.yaml
+Device: mps
+Batch size: 128
+Epochs: 5
+
+2024-12-13 05:14:07,721 [INFO] Starting training for resnet_variant_1
+2024-12-13 05:14:07,721 [INFO] Configuration: experiments/multi_comparison/resnet_variant_1/config/test_hyperparams.yaml
+2024-12-13 05:14:07,723 [INFO] Using device: mps
+
+ResNet-18 Architecture:
+--------------------------------------------------
+Initial Conv Layer: 3 -> 64 channels
+Layer1: 64 -> 64 channels, 2 blocks with SE
+Layer2: 64 -> 128 channels, 2 blocks with SE
+Layer3: 128 -> 256 channels, 2 blocks with SE
+Layer4: 256 -> 512 channels, 2 blocks with SE
+Global Average Pooling
+Fully Connected: 512 -> 10 classes
+--------------------------------------------------
+2024-12-13 05:14:09,913 [INFO] Starting training loop
+Traceback (most recent call last):
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 410, in <module>
+    main() 
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 400, in main
+    results = train_variant(args.config_path, args)
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 344, in train_variant
+    train_metrics = train_epoch(epoch, model, data.train_loader, criterion, 
+AttributeError: 'CIFAR10Data' object has no attribute 'train_loader'

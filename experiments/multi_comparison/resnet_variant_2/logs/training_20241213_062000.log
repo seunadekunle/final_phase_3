@@ -1,0 +1,44 @@
+=== Training started at 2024-12-13 06:20:00 ===
+Variant: resnet_variant_2
+Description: Test run: Variant 2 with MixUp and label smoothing
+Configuration: experiments/multi_comparison/resnet_variant_2/config/test_hyperparams.yaml
+Device: mps
+Batch size: 128
+Epochs: 1
+
+2024-12-13 06:20:02,313 [INFO] Starting training for resnet_variant_2
+2024-12-13 06:20:02,313 [INFO] Configuration: experiments/multi_comparison/resnet_variant_2/config/test_hyperparams.yaml
+2024-12-13 06:20:02,314 [INFO] Using device: mps
+
+ResNet-18 Architecture:
+--------------------------------------------------
+Initial Conv Layer: 3 -> 64 channels
+Layer1: 64 -> 64 channels, 2 blocks with SE
+Layer2: 64 -> 128 channels, 2 blocks with SE
+Layer3: 128 -> 256 channels, 2 blocks with SE
+Layer4: 256 -> 512 channels, 2 blocks with SE
+Global Average Pooling
+Fully Connected: 512 -> 10 classes
+--------------------------------------------------
+2024-12-13 06:20:04,168 [INFO] 
+ResNet-18 Architecture:
+2024-12-13 06:20:04,168 [INFO] --------------------------------------------------
+2024-12-13 06:20:04,168 [INFO] Initial Conv Layer: 3 -> 64 channels
+2024-12-13 06:20:04,168 [INFO] Layer1: 64 -> 64 channels, 2 blocks with SE
+2024-12-13 06:20:04,168 [INFO] Layer2: 64 -> 128 channels, 2 blocks with SE
+2024-12-13 06:20:04,168 [INFO] Layer3: 128 -> 256 channels, 2 blocks with SE
+2024-12-13 06:20:04,168 [INFO] Layer4: 256 -> 512 channels, 2 blocks with SE
+2024-12-13 06:20:04,168 [INFO] Global Average Pooling
+2024-12-13 06:20:04,168 [INFO] Fully Connected: 512 -> 10 classes
+2024-12-13 06:20:04,168 [INFO] --------------------------------------------------
+2024-12-13 06:20:04,169 [INFO] Starting training loop
+Traceback (most recent call last):
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 454, in <module>
+    main() 
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 444, in main
+    results = train_variant(args.config_path, args)
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 366, in train_variant
+    train_metrics = train_epoch(epoch, model, data.train_dataloader(), criterion, 
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 221, in train_epoch
+    desc = f'Epoch {epoch}/{config["training"]["num_epochs"]}'
+NameError: name 'config' is not defined

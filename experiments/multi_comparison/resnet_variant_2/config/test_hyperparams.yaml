@@ -5,11 +5,11 @@ paths:
   log_dir: '../logs'
 
 training:
-  batch_size: 96
+  batch_size: 128
   device: 'mps'
   seed: 42
   num_workers: 4
-  num_epochs: 5  # reduced for testing
+  num_epochs: 1
 
 optimization:
   learning_rate: 0.1

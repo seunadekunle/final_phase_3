@@ -9,7 +9,7 @@ training:
   device: 'mps'
   seed: 42
   num_workers: 4
-  num_epochs: 5  # reduced for testing
+  num_epochs: 1
 
 optimization:
   learning_rate: 0.1
