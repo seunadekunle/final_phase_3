@@ -1,2 +1,6 @@
 .cursorrules
 steps.md
+checkpoints/*.pth
+data/
+checkpoints/*.pth
+data/
