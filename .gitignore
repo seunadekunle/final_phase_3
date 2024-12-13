@@ -4,3 +4,6 @@ checkpoints/*.pth
 data/
 checkpoints/*.pth
 data/
+checkpoints/best.pth
+checkpoints/latest.pth
+data/cifar-10-python.tar.gz
