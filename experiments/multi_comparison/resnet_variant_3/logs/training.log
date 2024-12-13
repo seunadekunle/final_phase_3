@@ -1,0 +1,27 @@
+
+ResNet-18 Architecture:
+--------------------------------------------------
+Initial Conv Layer: 3 -> 64 channels
+Layer1: 64 -> 64 channels, 2 blocks with SE
+Layer2: 64 -> 128 channels, 2 blocks with SE
+Layer3: 128 -> 256 channels, 2 blocks with SE
+Layer4: 256 -> 512 channels, 2 blocks with SE
+Global Average Pooling
+Fully Connected: 512 -> 10 classes
+--------------------------------------------------
+python(33641) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33649) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33667) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33696) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+Traceback (most recent call last):
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 315, in <module>
+    train_variant(args.config_path) 
+  File "/Users/seunadekunle/school/567/style_classifier_3/src/train_variant.py", line 272, in train_variant
+    scheduler.step()
+  File "/Users/seunadekunle/miniconda3/envs/cifar10_resnet18/lib/python3.9/site-packages/torch/optim/lr_scheduler.py", line 241, in step
+    values = self.get_lr()
+  File "/Users/seunadekunle/miniconda3/envs/cifar10_resnet18/lib/python3.9/site-packages/torch/optim/lr_scheduler.py", line 1123, in get_lr
+    return [
+  File "/Users/seunadekunle/miniconda3/envs/cifar10_resnet18/lib/python3.9/site-packages/torch/optim/lr_scheduler.py", line 1126, in <listcomp>
+    * (group["lr"] - self.eta_min)
+TypeError: unsupported operand type(s) for -: 'float' and 'str'

@@ -1,0 +1,53 @@
+# ResNet-18 Variant 1 Test Configuration (CutMix + Cosine Annealing)
+paths:
+  data_dir: './data'
+  checkpoint_dir: '../checkpoints'
+  log_dir: '../logs'
+
+training:
+  batch_size: 128
+  device: 'mps'
+  seed: 42
+  num_workers: 4
+  num_epochs: 5  # reduced for testing
+
+optimization:
+  learning_rate: 0.1
+  momentum: 0.9
+  weight_decay: 3e-4
+  nesterov: true
+
+lr_schedule:
+  type: 'cosine'
+  warmup_epochs: 2  # reduced for testing
+  min_lr: 1e-5
+  warmup_start_lr: 0.01
+  cosine_decay_end: 0.0001
+
+advanced_training:
+  stochastic_depth_prob: 0.5
+  label_smoothing: 0.15
+  mixup_alpha: 0.0
+  cutmix_alpha: 1.0
+  cutmix_prob: 0.5
+
+data_augmentation:
+  randaugment: true
+  randaugment_n: 2
+  randaugment_m: 10
+  random_erasing_prob: 0.25
+  trivialaugment: false
+
+regularization:
+  drop_path_rate: 0.15
+
+early_stopping:
+  patience: 5  # reduced for testing
+  min_delta: 0.0005
+
+model:
+  name: "ResNet18"
+  num_classes: 10
+  use_se_blocks: true
+
+variant_description: "Test run: Variant 1 with CutMix and cosine annealing" 

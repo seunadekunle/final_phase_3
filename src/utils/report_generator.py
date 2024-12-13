@@ -8,147 +8,120 @@ import torch.nn as nn
 from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
+import yaml
 
 class ReportGenerator:
-    def __init__(self, model, config, save_dir='reports'):
+    """Generate training reports and visualizations."""
+    
+    def __init__(self, model, config, save_dir):
+        """Initialize report generator.
+        
+        Args:
+            model (nn.Module): The model being trained
+            config (dict): Training configuration
+            save_dir (Path): Directory to save reports and plots
+        """
         self.model = model
         self.config = config
         self.save_dir = Path(save_dir)
         self.save_dir.mkdir(parents=True, exist_ok=True)
-        self.metrics = {
-            'epoch_metrics': [],
-            'train_losses': [],
-            'train_accs': [],
-            'val_losses': [],
-            'val_accs': [],
-            'learning_rates': []
+        
+        # Initialize metrics tracking
+        self.train_losses = []
+        self.train_accs = []
+        self.val_losses = []
+        self.val_accs = []
+        self.learning_rates = []
+        
+    def update(self, epoch, train_loss, train_acc, val_loss, val_acc):
+        """Update metrics after each epoch.
+        
+        Args:
+            epoch (int): Current epoch number
+            train_loss (float): Training loss
+            train_acc (float): Training accuracy
+            val_loss (float): Validation loss
+            val_acc (float): Validation accuracy
+        """
+        self.train_losses.append(train_loss)
+        self.train_accs.append(train_acc)
+        self.val_losses.append(val_loss)
+        self.val_accs.append(val_acc)
+        
+        # Print progress
+        print(f'\nEpoch: {epoch+1}')
+        print(f'Train Loss: {train_loss:.3f} | Train Acc: {train_acc:.2f}%')
+        print(f'Val Loss: {val_loss:.3f} | Val Acc: {val_acc:.2f}%')
+        print('='*70)
+    
+    def finalize(self, test_loss, test_acc, training_time):
+        """Generate final report and plots.
+        
+        Args:
+            test_loss (float): Final test loss
+            test_acc (float): Final test accuracy
+            training_time (float): Total training time in seconds
+        """
+        # Save metrics
+        metrics = {
+            'train_losses': self.train_losses,
+            'train_accs': self.train_accs,
+            'val_losses': self.val_losses,
+            'val_accs': self.val_accs,
+            'test_loss': test_loss,
+            'test_acc': test_acc,
+            'training_time': training_time
         }
         
-    def update_metrics(self, epoch_metrics):
-        """Update metrics after each epoch."""
-        self.metrics['epoch_metrics'].append(epoch_metrics)
-        self.metrics['train_losses'].append(epoch_metrics['train_loss'])
-        self.metrics['train_accs'].append(epoch_metrics['train_acc'])
-        self.metrics['val_losses'].append(epoch_metrics['val_loss'])
-        self.metrics['val_accs'].append(epoch_metrics['val_acc'])
-        self.metrics['learning_rates'].append(epoch_metrics['learning_rate'])
+        # Plot training curves
+        self._plot_training_curves()
+        
+        # Generate report
+        self._generate_report(metrics)
     
-    def plot_training_curves(self):
-        """Generate training curves."""
-        # Set seaborn style
-        sns.set_theme(style="darkgrid")
+    def _plot_training_curves(self):
+        """Plot training and validation curves."""
+        plt.figure(figsize=(12, 4))
         
-        # Create figure with subplots
-        fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 12))
+        # Loss plot
+        plt.subplot(1, 2, 1)
+        plt.plot(self.train_losses, label='Train')
+        plt.plot(self.val_losses, label='Validation')
+        plt.title('Loss Curves')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.legend()
         
-        # Plot accuracy
-        epochs = range(1, len(self.metrics['train_accs']) + 1)
-        sns.lineplot(x=epochs, y=self.metrics['train_accs'], label='Train Acc', ax=ax1)
-        sns.lineplot(x=epochs, y=self.metrics['val_accs'], label='Val Acc', ax=ax1)
-        ax1.set_title('Training and Validation Accuracy')
-        ax1.set_xlabel('Epoch')
-        ax1.set_ylabel('Accuracy (%)')
-        ax1.legend()
-        
-        # Plot loss
-        sns.lineplot(x=epochs, y=self.metrics['train_losses'], label='Train Loss', ax=ax2)
-        sns.lineplot(x=epochs, y=self.metrics['val_losses'], label='Val Loss', ax=ax2)
-        ax2.set_title('Training and Validation Loss')
-        ax2.set_xlabel('Epoch')
-        ax2.set_ylabel('Loss')
-        ax2.legend()
+        # Accuracy plot
+        plt.subplot(1, 2, 2)
+        plt.plot(self.train_accs, label='Train')
+        plt.plot(self.val_accs, label='Validation')
+        plt.title('Accuracy Curves')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy (%)')
+        plt.legend()
         
         plt.tight_layout()
         plt.savefig(self.save_dir / 'training_curves.png')
         plt.close()
     
-    def generate_model_summary(self):
-        """Generate model architecture summary."""
-        summary = []
-        total_params = 0
-        trainable_params = 0
+    def _generate_report(self, metrics):
+        """Generate training report.
         
-        for name, param in self.model.named_parameters():
-            param_count = param.numel()
-            total_params += param_count
-            if param.requires_grad:
-                trainable_params += param_count
-            layer_info = f"{name}: {list(param.shape)}, Parameters: {param_count:,}"
-            summary.append(layer_info)
+        Args:
+            metrics (dict): Training metrics
+        """
+        report = [
+            "# Training Report\n",
+            f"## Configuration\n```yaml\n{yaml.dump(self.config, default_flow_style=False)}```\n",
+            "## Results\n",
+            f"- Test Loss: {metrics['test_loss']:.4f}",
+            f"- Test Accuracy: {metrics['test_acc']:.2f}%",
+            f"- Training Time: {metrics['training_time']/3600:.2f} hours",
+            f"- Best Validation Accuracy: {max(self.val_accs):.2f}%",
+            "\n## Training Curves\n",
+            "![Training Curves](training_curves.png)\n"
+        ]
         
-        return {
-            'layer_summary': summary,
-            'total_params': total_params,
-            'trainable_params': trainable_params
-        }
-    
-    def generate_baseline_report(self, final_metrics):
-        """Generate the baseline report markdown file."""
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        report_path = self.save_dir / f'baseline_report_{timestamp}.md'
-        
-        model_summary = self.generate_model_summary()
-        best_val_acc = max(self.metrics['val_accs'])
-        best_epoch = self.metrics['val_accs'].index(best_val_acc) + 1
-        
-        with open(report_path, 'w') as f:
-            # Title
-            f.write("# ResNet-18 CIFAR-10 Baseline Report\n\n")
-            f.write(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-            
-            # Model Architecture
-            f.write("## Model Architecture\n\n")
-            f.write("### Overview\n")
-            f.write("- Base Architecture: ResNet-18\n")
-            f.write("- Input Size: 32x32x3 (CIFAR-10 images)\n")
-            f.write(f"- Total Parameters: {model_summary['total_params']:,}\n")
-            f.write(f"- Trainable Parameters: {model_summary['trainable_params']:,}\n\n")
-            
-            # Hyperparameters
-            f.write("## Training Hyperparameters\n\n")
-            f.write("```python\n")
-            for key, value in vars(self.config).items():
-                if not key.startswith('__'):
-                    f.write(f"{key} = {value}\n")
-            f.write("```\n\n")
-            
-            # Performance Metrics
-            f.write("## Performance Metrics\n\n")
-            f.write("### Final Results\n")
-            f.write(f"- Test Accuracy: {final_metrics['test_acc']:.2f}%\n")
-            f.write(f"- Test Loss: {final_metrics['test_loss']:.4f}\n")
-            f.write(f"- Best Validation Accuracy: {best_val_acc:.2f}% (Epoch {best_epoch})\n")
-            f.write(f"- Training Time: {final_metrics['training_time']:.2f} hours\n\n")
-            
-            # Training Curves
-            f.write("### Training Curves\n")
-            f.write("![Training Curves](training_curves.png)\n\n")
-            
-            # Comparison to Original ResNet-18
-            f.write("## Comparison to Original ResNet-18\n\n")
-            f.write("### Architectural Differences\n")
-            f.write("- Base implementation follows the original ResNet-18 architecture\n")
-            f.write("- Adapted for CIFAR-10 with appropriate input size handling\n")
-            f.write("- Uses batch normalization and ReLU activation as in original paper\n\n")
-            
-            # Notes and Observations
-            f.write("## Notes and Observations\n\n")
-            f.write("### Training Process\n")
-            f.write(f"- Model trained for {len(self.metrics['epoch_metrics'])} epochs\n")
-            f.write(f"- Used {self.config.device} for training\n")
-            f.write("- Implemented early stopping with patience\n\n")
-            
-            f.write("### Challenges and Solutions\n")
-            f.write("1. Initial Implementation:\n")
-            f.write("   - Challenge: Adapting ResNet-18 for CIFAR-10\n")
-            f.write("   - Solution: Modified initial convolution and pooling layers\n\n")
-            
-            f.write("2. Training Stability:\n")
-            f.write("   - Challenge: Learning rate tuning\n")
-            f.write("   - Solution: Implemented warmup and cosine annealing\n\n")
-            
-            f.write("3. Overfitting:\n")
-            f.write("   - Challenge: Gap between train and validation accuracy\n")
-            f.write("   - Solution: Added data augmentation and regularization\n\n")
-            
-        return report_path 
+        with open(self.save_dir / 'report.md', 'w') as f:
+            f.write('\n'.join(report))

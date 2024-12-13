@@ -1,0 +1,104 @@
+
+ResNet-18 Architecture:
+--------------------------------------------------
+Initial Conv Layer: 3 -> 64 channels
+Layer1: 64 -> 64 channels, 2 blocks with SE
+Layer2: 64 -> 128 channels, 2 blocks with SE
+Layer3: 128 -> 256 channels, 2 blocks with SE
+Layer4: 256 -> 512 channels, 2 blocks with SE
+Global Average Pooling
+Fully Connected: 512 -> 10 classes
+--------------------------------------------------
+python(33566) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33587) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33594) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33600) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+
+Epoch: 1
+Train Loss: 2.258 | Train Acc: 18.85%
+Val Loss: 1.834 | Val Acc: 36.08%
+======================================================================
+python(33675) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33699) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33718) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33724) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33840) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33841) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33842) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33843) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+
+Epoch: 2
+Train Loss: 1.994 | Train Acc: 30.88%
+Val Loss: 1.657 | Val Acc: 45.48%
+======================================================================
+python(33855) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33856) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33857) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33858) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33903) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33904) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33905) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33906) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+
+Epoch: 3
+Train Loss: 1.868 | Train Acc: 38.38%
+Val Loss: 1.536 | Val Acc: 52.02%
+======================================================================
+python(33932) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33933) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33934) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33935) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33975) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33976) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33977) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33978) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+
+Epoch: 4
+Train Loss: 1.754 | Train Acc: 44.99%
+Val Loss: 1.494 | Val Acc: 56.66%
+======================================================================
+python(33992) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33993) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33994) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(33995) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34024) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34027) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34032) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34033) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+
+Epoch: 5
+Train Loss: 1.621 | Train Acc: 51.93%
+Val Loss: 1.138 | Val Acc: 72.24%
+======================================================================
+python(34046) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34047) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34048) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34049) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34196) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34197) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34198) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34199) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+
+Epoch: 6
+Train Loss: 1.570 | Train Acc: 54.28%
+Val Loss: 1.131 | Val Acc: 72.04%
+======================================================================
+python(34212) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34213) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34214) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34217) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34387) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34399) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34403) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34408) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+
+Epoch: 7
+Train Loss: 1.555 | Train Acc: 54.86%
+Val Loss: 1.094 | Val Acc: 74.20%
+======================================================================
+python(34449) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34458) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34460) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+python(34461) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+/Users/seunadekunle/miniconda3/envs/cifar10_resnet18/lib/python3.9/multiprocessing/resource_tracker.py:216: UserWarning: resource_tracker: There appear to be 20 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

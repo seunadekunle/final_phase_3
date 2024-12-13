@@ -10,12 +10,38 @@ Architecture Details:
 - Global Average Pooling
 - Fully Connected Layer (512 -> num_classes)
 
-Total number of layers: 18 (1 + 16 conv layers in basic blocks + 1 FC layer)
+Optional SE (Squeeze-and-Excitation) blocks can be added to each residual block.
 """
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+class SEBlock(nn.Module):
+    """Squeeze-and-Excitation block."""
+    
+    def __init__(self, channel, reduction=16):
+        """
+        Initialize SE block.
+        
+        Args:
+            channel (int): Number of input channels
+            reduction (int): Reduction ratio for the bottleneck
+        """
+        super(SEBlock, self).__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Sequential(
+            nn.Linear(channel, channel // reduction, bias=False),
+            nn.ReLU(inplace=True),
+            nn.Linear(channel // reduction, channel, bias=False),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        b, c, _, _ = x.size()
+        y = self.avg_pool(x).view(b, c)
+        y = self.fc(y).view(b, c, 1, 1)
+        return x * y.expand_as(x)
 
 class BasicBlock(nn.Module):
     """
@@ -26,36 +52,42 @@ class BasicBlock(nn.Module):
     
     If input channels != output channels or stride != 1:
         input -> 1x1 conv -> bn -> (+) -> output
+        
+    Optional SE block can be added after conv2.
     """
     
     expansion = 1
 
-    def __init__(self, in_channels, out_channels, stride=1):
+    def __init__(self, in_channels, out_channels, stride=1, use_se=False):
         """
-        initialize basic block
+        Initialize basic block.
         
-        args:
-            in_channels (int): number of input channels
-            out_channels (int): number of output channels
-            stride (int): stride for convolution (used for downsampling)
+        Args:
+            in_channels (int): Number of input channels
+            out_channels (int): Number of output channels
+            stride (int): Stride for convolution (used for downsampling)
+            use_se (bool): Whether to use SE block
         """
         super(BasicBlock, self).__init__()
         
-        # first convolution block
+        # First convolution block
         self.conv1 = nn.Conv2d(
             in_channels, out_channels, kernel_size=3, 
             stride=stride, padding=1, bias=False
         )
         self.bn1 = nn.BatchNorm2d(out_channels)
         
-        # second convolution block
+        # Second convolution block
         self.conv2 = nn.Conv2d(
             out_channels, out_channels * self.expansion, kernel_size=3,
             stride=1, padding=1, bias=False
         )
         self.bn2 = nn.BatchNorm2d(out_channels * self.expansion)
         
-        # shortcut connection (identity mapping or 1x1 conv)
+        # SE block
+        self.se = SEBlock(out_channels * self.expansion) if use_se else None
+        
+        # Shortcut connection (identity mapping or 1x1 conv)
         self.shortcut = nn.Sequential()
         if stride != 1 or in_channels != self.expansion * out_channels:
             self.shortcut = nn.Sequential(
@@ -66,29 +98,33 @@ class BasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion * out_channels)
             )
         
-        # dropout for regularization
+        # Dropout for regularization
         self.dropout = nn.Dropout(0.1)
 
     def forward(self, x):
         """
-        forward pass of the basic block
+        Forward pass of the basic block.
         
-        args:
-            x (torch.Tensor): input tensor
+        Args:
+            x (torch.Tensor): Input tensor
             
-        returns:
-            torch.Tensor: output tensor after residual connection
+        Returns:
+            torch.Tensor: Output tensor after residual connection
         """
         identity = x
         
-        # first conv block
+        # First conv block
         out = F.relu(self.bn1(self.conv1(x)))
         out = self.dropout(out)
         
-        # second conv block
+        # Second conv block
         out = self.bn2(self.conv2(out))
         
-        # residual connection
+        # Apply SE if enabled
+        if self.se is not None:
+            out = self.se(out)
+        
+        # Residual connection
         out += self.shortcut(identity)
         out = F.relu(out)
         
@@ -102,129 +138,133 @@ class ResNet18(nn.Module):
     1. Initial conv layer has stride=1 instead of stride=2
     2. No max pooling after initial conv
     3. Ends with adaptive average pooling to handle varying input sizes
+    4. Optional SE blocks in each residual block
     """
     
-    def __init__(self, num_classes=10, dropout_rate=0.0):
+    def __init__(self, num_classes=10, dropout_rate=0.0, use_se_blocks=False):
         """
-        initialize resnet18
+        Initialize ResNet18.
         
-        args:
-            num_classes (int): number of output classes
-            dropout_rate (float): dropout rate for regularization
+        Args:
+            num_classes (int): Number of output classes
+            dropout_rate (float): Dropout rate for regularization
+            use_se_blocks (bool): Whether to use SE blocks in residual blocks
         """
         super().__init__()
         
-        # initial convolution layer
+        # Initial convolution layer
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3,
                               stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
         
-        # residual layers
-        self.layer1 = self.make_layer(64, 64, 2, stride=1)
-        self.layer2 = self.make_layer(64, 128, 2, stride=2)
-        self.layer3 = self.make_layer(128, 256, 2, stride=2)
-        self.layer4 = self.make_layer(256, 512, 2, stride=2)
+        # Residual layers
+        self.layer1 = self.make_layer(64, 64, 2, stride=1, use_se=use_se_blocks)
+        self.layer2 = self.make_layer(64, 128, 2, stride=2, use_se=use_se_blocks)
+        self.layer3 = self.make_layer(128, 256, 2, stride=2, use_se=use_se_blocks)
+        self.layer4 = self.make_layer(256, 512, 2, stride=2, use_se=use_se_blocks)
         
-        # global average pooling and final fully connected layer
+        # Global average pooling and final fully connected layer
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.dropout = nn.Dropout(dropout_rate)
         self.fc = nn.Linear(512, num_classes)
         
-        # initialize weights
+        # Initialize weights
         self._initialize_weights()
         
-        # print model summary
-        self._print_model_summary()
+        # Print model summary
+        self._print_model_summary(use_se_blocks)
 
-    def make_layer(self, in_channels, out_channels, num_blocks, stride):
+    def make_layer(self, in_channels, out_channels, num_blocks, stride, use_se=False):
         """
-        create a layer of basic blocks
+        Create a layer of basic blocks.
         
-        args:
-            in_channels (int): number of input channels
-            out_channels (int): number of output channels
-            num_blocks (int): number of basic blocks in the layer
-            stride (int): stride for first block (for downsampling)
+        Args:
+            in_channels (int): Number of input channels
+            out_channels (int): Number of output channels
+            num_blocks (int): Number of basic blocks in the layer
+            stride (int): Stride for first block (for downsampling)
+            use_se (bool): Whether to use SE blocks
             
-        returns:
-            nn.Sequential: sequence of basic blocks
+        Returns:
+            nn.Sequential: Sequence of basic blocks
         """
         layers = []
-        layers.append(BasicBlock(in_channels, out_channels, stride))
+        layers.append(BasicBlock(in_channels, out_channels, stride, use_se))
         for _ in range(1, num_blocks):
-            layers.append(BasicBlock(out_channels, out_channels))
+            layers.append(BasicBlock(out_channels, out_channels, use_se=use_se))
         return nn.Sequential(*layers)
 
     def forward(self, x):
         """
-        forward pass of the network
+        Forward pass of the network.
         
-        args:
-            x (torch.Tensor): input tensor of shape (batch_size, 3, H, W)
+        Args:
+            x (torch.Tensor): Input tensor of shape (batch_size, 3, H, W)
             
-        returns:
-            torch.Tensor: output tensor of shape (batch_size, num_classes)
+        Returns:
+            torch.Tensor: Output tensor of shape (batch_size, num_classes)
         """
-        # initial conv block
+        # Initial conv block
         out = F.relu(self.bn1(self.conv1(x)))
         
-        # residual blocks
+        # Residual blocks
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
         
-        # global average pooling
+        # Global average pooling
         out = self.avgpool(out)
         out = torch.flatten(out, 1)
         
-        # final classification
+        # Final classification
         out = self.dropout(out)
         out = self.fc(out)
         
         return out
     
     def _initialize_weights(self):
-        """
-        initialize model weights using kaiming initialization
-        """
+        """Initialize model weights using Kaiming initialization."""
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.BatchNorm2d):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.Linear):
                 nn.init.normal_(m.weight, 0, 0.01)
-                nn.init.constant_(m.bias, 0)
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
     
-    def _print_model_summary(self):
-        """print model architecture summary"""
+    def _print_model_summary(self, use_se):
+        """Print model architecture summary."""
         print("\nResNet-18 Architecture:")
         print("-" * 50)
         print("Initial Conv Layer: 3 -> 64 channels")
-        print("Layer1: 64 -> 64 channels, 2 blocks")
-        print("Layer2: 64 -> 128 channels, 2 blocks")
-        print("Layer3: 128 -> 256 channels, 2 blocks")
-        print("Layer4: 256 -> 512 channels, 2 blocks")
+        print(f"Layer1: 64 -> 64 channels, 2 blocks {'with SE' if use_se else ''}")
+        print(f"Layer2: 64 -> 128 channels, 2 blocks {'with SE' if use_se else ''}")
+        print(f"Layer3: 128 -> 256 channels, 2 blocks {'with SE' if use_se else ''}")
+        print(f"Layer4: 256 -> 512 channels, 2 blocks {'with SE' if use_se else ''}")
         print("Global Average Pooling")
         print(f"Fully Connected: 512 -> {self.fc.out_features} classes")
         print("-" * 50)
 
 def count_parameters(model):
     """
-    count number of trainable parameters in the model
+    Count number of trainable parameters in the model.
     
-    args:
-        model (nn.Module): pytorch model
+    Args:
+        model (nn.Module): PyTorch model
         
-    returns:
-        int: number of trainable parameters
+    Returns:
+        int: Number of trainable parameters
     """
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 if __name__ == '__main__':
-    # create model and print summary
-    model = ResNet18()
+    # Create model and print summary
+    model = ResNet18(use_se_blocks=True)
     print(f"\nTotal trainable parameters: {count_parameters(model):,}")

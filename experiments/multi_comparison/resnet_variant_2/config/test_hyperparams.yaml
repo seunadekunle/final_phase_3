@@ -1,0 +1,54 @@
+# ResNet-18 Variant 2 Test Configuration (MixUp + Label Smoothing)
+paths:
+  data_dir: './data'
+  checkpoint_dir: '../checkpoints'
+  log_dir: '../logs'
+
+training:
+  batch_size: 96
+  device: 'mps'
+  seed: 42
+  num_workers: 4
+  num_epochs: 5  # reduced for testing
+
+optimization:
+  learning_rate: 0.1
+  momentum: 0.9
+  weight_decay: 3e-4
+  nesterov: true
+
+lr_schedule:
+  type: 'multistep'  # multi-step learning rate schedule
+  warmup_epochs: 2  # reduced for testing
+  min_lr: 1e-5
+  warmup_start_lr: 0.01
+  milestones: [4, 7]  # adjusted for shorter training
+  gamma: 0.1  # learning rate decay factor
+
+advanced_training:
+  stochastic_depth_prob: 0.5
+  label_smoothing: 0.1  # enabled label smoothing
+  mixup_alpha: 0.8  # increased mixup alpha
+  cutmix_alpha: 0.0  # disabled cutmix
+  mixup_prob: 0.7  # high probability of applying mixup
+
+data_augmentation:
+  randaugment: true
+  randaugment_n: 2
+  randaugment_m: 10
+  random_erasing_prob: 0.25
+  trivialaugment: false
+
+regularization:
+  drop_path_rate: 0.15
+
+early_stopping:
+  patience: 5  # reduced for testing
+  min_delta: 0.0005
+
+model:
+  name: "ResNet18"
+  num_classes: 10
+  use_se_blocks: true
+
+variant_description: "Test run: Variant 2 with MixUp and label smoothing" 

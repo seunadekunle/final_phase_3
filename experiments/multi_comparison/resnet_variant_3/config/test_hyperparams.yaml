@@ -1,0 +1,64 @@
+# ResNet-18 Variant 3 Test Configuration (Combined Augmentations + SWA)
+paths:
+  data_dir: './data'
+  checkpoint_dir: '../checkpoints'
+  log_dir: '../logs'
+
+training:
+  batch_size: 128
+  device: 'mps'
+  seed: 42
+  num_workers: 4
+  num_epochs: 5  # reduced for testing
+
+optimization:
+  learning_rate: 0.1
+  momentum: 0.9
+  weight_decay: 2e-4
+  nesterov: true
+
+lr_schedule:
+  type: 'cosine'
+  warmup_epochs: 2  # reduced for testing
+  min_lr: 1e-5
+  warmup_start_lr: 0.01
+  cosine_decay_end: 0.0001
+
+advanced_training:
+  stochastic_depth_prob: 0.5
+  label_smoothing: 0.1
+  mixup_alpha: 0.4
+  cutmix_alpha: 1.0
+  mixup_prob: 0.5
+  cutmix_prob: 0.5
+  alternate_augment: true  # alternate between mixup and cutmix
+
+data_augmentation:
+  randaugment: true
+  randaugment_n: 2
+  randaugment_m: 10
+  random_erasing_prob: 0.25
+  trivialaugment: false
+
+regularization:
+  drop_path_rate: 0.15
+  dropout_rate: 0.3  # dropout for FC layer
+
+swa:  # Stochastic Weight Averaging settings
+  enabled: true
+  start_epoch: 5  # reduced for testing
+  lr: 0.01
+  anneal_epochs: 2  # reduced for testing
+  anneal_strategy: 'cos'
+
+early_stopping:
+  patience: 5  # reduced for testing
+  min_delta: 0.0005
+
+model:
+  name: "ResNet18"
+  num_classes: 10
+  use_se_blocks: true
+  use_fc_dropout: true  # enable dropout in FC layer
+
+variant_description: "Test run: Variant 3 with combined augmentations and SWA" 
